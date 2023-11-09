@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 import streamlit as st
 import json
 import random
-import matplotlib.pyplot as plt
-import pandas as pd
 import geopandas as gpd
 import folium
 
 from shapely.geometry import Point
 
 def regenerate() -> None:
+    st.markdown("# Regénérer les données")
     st.markdown(
         """
         ## Paramètres
@@ -48,40 +47,26 @@ def regenerate() -> None:
             folium.Marker([lat, lon], popup=name).add_to(m)
 
         # create an array with for each arrondissement the number of events
-        events_per_arrondissement = [0] * 20
+        events_per_arrondissement = {}
         for event in events:
             lat = event["location"]["latitude"]
             lon = event["location"]["longitude"]
-
             point = Point(lon, lat)
-            minx, miny, maxx, maxy = point.bounds
-            contains_point = paris_arrondissements.cx[minx:maxx, miny:maxy]
-            if not contains_point.empty:
-                arrondissement = paris_arrondissements.iloc[contains_point.index[0]]["c_arinsee"]
-            else:
-                arrondissement = None
-            
-            if arrondissement is not None:
-                events_per_arrondissement[int(arrondissement) - 1] += 1
+            for i, arrondissement in paris_arrondissements.iterrows():
+                num_arrondissement = arrondissement["nom"].split(" ")[1]
+                num_arrondissement = "".join([c for c in num_arrondissement if c.isdigit()])
+                if len(num_arrondissement) == 1:
+                    num_arrondissement = "0" + num_arrondissement
+                if point.within(arrondissement.geometry):
+                    try:
+                        events_per_arrondissement[num_arrondissement+"e"] += 1
+                    except KeyError:
+                        events_per_arrondissement[num_arrondissement+"e"] = 1
+                    break
 
         json.dump(events_per_arrondissement, open("data/events_per_arrondissement.json", "w"), indent=4)
 
         m.save("data/paris_map.html")
-
-        # -----
-
-        # paris_arrondissements = gpd.read_file("data/paris_arrondissements.geojson")
-        # events_per_arrondissement = json.load(open("data/events_per_arrondissement.json"))
-        # events_per_arrondissement = pd.DataFrame(events_per_arrondissement, columns=["events"])
-        # paris_arrondissements = paris_arrondissements.merge(events_per_arrondissement)
-        # fig, ax = plt.subplots(1, 1, figsize=(10, 6))
-        # paris_arrondissements.plot(column='events', cmap='OrRd', linewidth=0.8, ax=ax, edgecolor='0.8', legend=True)
-        # ax.set_title("Nombre d'événements par arrondissement de Paris")
-        # ax.axis('off')
-
-        # st.pyplot(fig)
-
-        # -----
 
         # End
         st.success("Données générées avec succès !")
@@ -121,7 +106,5 @@ def generate_events(start_date: datetime, end_date: datetime, number_of_events: 
     with open("data/events.json", "w") as f:
         json.dump(json_objects, f, indent=4)
     return json_objects
-
-st.markdown("# Regénérer les données")
 
 regenerate()

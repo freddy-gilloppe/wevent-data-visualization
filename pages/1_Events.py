@@ -14,9 +14,10 @@ def events_demo() -> None:
 
     filtered_events = [event for event in events if start_date <= datetime.strptime(event["dates"]["start"], "%Y-%m-%d %H:%M:%S").date() <= end_date]
 
-    st.markdown(f"## Events par {time_unit}")
+    col1, col2 = st.columns(2)
+    
+    col1.markdown(f"## Events par {time_unit}")
     events_per_unit = {}
-
     for event in filtered_events:
         start_date = datetime.strptime(event["dates"]["start"], "%Y-%m-%d %H:%M:%S")
 
@@ -32,11 +33,10 @@ def events_demo() -> None:
             events_per_unit[unit] += 1
         else:
             events_per_unit[unit] = 1
-    st.bar_chart(events_per_unit)
-
-    st.markdown(f"## Durée moyenne en heure des Events par {time_unit}")
+    col1.bar_chart(events_per_unit)
+    
+    col2.markdown(f"## Durée moyenne en heure des Events par {time_unit}")
     durations_per_unit = {}
-
     for event in filtered_events:
         start_date = datetime.strptime(event["dates"]["start"], "%Y-%m-%d %H:%M:%S")
         end_date = datetime.strptime(event["dates"]["end"], "%Y-%m-%d %H:%M:%S")
@@ -57,9 +57,8 @@ def events_demo() -> None:
             durations_per_unit[unit].append(duration_hours)
         else:
             durations_per_unit[unit] = [duration_hours]
-
     mean_durations_per_unit = {unit: sum(durations_per_unit[unit]) / len(durations_per_unit[unit]) for unit in durations_per_unit}
-    st.line_chart(mean_durations_per_unit)
+    col2.line_chart(mean_durations_per_unit)
 
     st.markdown(f"## Répartition des Events sur la carte")
     mapData = []
@@ -74,9 +73,7 @@ def events_demo() -> None:
     events_per_arrondissement = json.load(open("data/events_per_arrondissement.json"))
     st.markdown(f"### Nombre d'Events par arrondissement")
     st.bar_chart(events_per_arrondissement)
-
-    # progress_bar = st.sidebar.progress(0)
-
+    # st.write(events_per_arrondissement)
 
 st.markdown("# Animation Demo")
 with st.expander("Events Json Object", expanded=False):

@@ -5,11 +5,10 @@ LOGGER = get_logger(__name__)
 
 def run():
     st.set_page_config(
-        page_title="Wevent Data Visualization",
-        page_icon="utils/icon.png",
+        page_title="Wevent Data Visualization"
     )
 
-    st.markdown("![Logo Wevent](https://dev.azure.com/hadjiai/ca64f8a4-cacc-4800-bfd7-4c00931de1ac/_apis/git/repositories/909a176e-8254-435a-8bb6-05467816beea/Items?path=/.attachments/Asset%204%403x%201-64911039-948b-4bf3-bfc2-e4601933b855.png&download=false&resolveLfs=true&%24format=octetStream&api-version=5.0-preview.1&sanitize=true)")
+    st.markdown("![Logo Wevent](https://drive.google.com/file/d/1-heyeYfvCrpxiusfUDk3cITvjrFeEUG8/view?usp=sharing)")
     st.write("# Data Visualization")
 
     st.markdown(
