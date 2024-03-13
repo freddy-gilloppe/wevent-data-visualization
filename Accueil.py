@@ -1,11 +1,12 @@
 import streamlit as st
+from components.sidebar import sidebar
 
 def run():
-    st.set_page_config(
-        page_title="Wevent Statistics"
-    )
+    st.set_page_config(page_title="Statistiques Wevent", page_icon=":bar_chart:", layout="wide")
 
-    st.write("# Wevent Statistics")
+    sidebar(st)
+
+    st.write("# Statistiques Wevent")
 
     st.markdown("""### Accédez aux données en cliquant sur le bouton "Données".""")
     st.markdown("---")
