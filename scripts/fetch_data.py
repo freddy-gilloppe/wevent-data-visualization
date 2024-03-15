@@ -1,9 +1,11 @@
 import pymongo
 import dotenv
+import os
 
 def fetch_data(start_date=None, end_date=None) -> dict:
     dotenv.load_dotenv()
-    mongo_uri = dotenv.get_key('.env', 'MONGO_URI')
+    # mongo_uri = dotenv.get_key('.env', 'MONGO_URI')
+    mongo_uri = os.environ["MONGO_URI"]
 
     client = pymongo.MongoClient(mongo_uri)
     database = client.wevent
