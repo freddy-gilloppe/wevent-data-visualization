@@ -44,7 +44,7 @@ def process_data(data: dict) -> dict:
     mean_price /= len(events) if len(events) > 0 else 1
     mean_price_without_free /= (len(events) if len(events) > 0 else 1) - number_of_free_events        
 
-    onlineUsers: int = len(list(filter(lambda user: user['onlineStatus'] == 'True', users)))
+    onlineUsers: int = len(list(filter(lambda user: user['onlineStatus'], users)))
 
     process_data = {
         'top_categories': top_categories,
