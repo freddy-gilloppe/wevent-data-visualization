@@ -21,7 +21,7 @@ st.header("Statistiques Wevent - État des services")
 
 services_etats = {
     "Statistiques Wevent": "running",
-    "Serveur API": "maintenance",
+    "Serveur API": "running",
     "Base de donnée Mongo": "running",
     "Azure DevOps": "running"
 }
